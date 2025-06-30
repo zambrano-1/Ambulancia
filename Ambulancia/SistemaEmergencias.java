@@ -9,6 +9,7 @@ public class SistemaEmergencias {
     private final ArrayList<Paciente> pacientes = new ArrayList<>();
     private final ArrayList<Conductor> conductores = new ArrayList<>();
     private final ArrayList<Ambulancia> ambulancias = new ArrayList<>();
+    private final ArrayList<Clinica> clinica = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -27,7 +28,11 @@ public class SistemaEmergencias {
                 case "3": registrarAmbulancia(); break;
                 case "4": marcarFallecido(); break;
                 case "5": generarReporte(); break;
-                case "6": System.out.println("Saliendo..."); return;
+                case "6": registrarClinica(); break;
+                case "7": solicitarAmbulancia(); break; 
+                case "8": mostrarPacientesNoMovidos(); break;
+                case "9": resumenAmbulancias(); break;
+                case "10": System.out.println("Saliendo..."); return;
                 default: System.out.println("Opción inválida.");
             }
         }
@@ -40,7 +45,11 @@ public class SistemaEmergencias {
         System.out.println("3. Registrar ambulancia");
         System.out.println("4. Marcar fallecido");
         System.out.println("5. Generar reporte");
-        System.out.println("6. Salir");
+        System.out.println("6. Registrar clinica");
+        System.out.println("7. Solicitar ambulancia");
+        System.out.println("8. Mostrar los pacientes que no fueron movidos");
+        System.out.println("9. Resumen de las ambulancias");
+        System.out.println("10. Salir");
     }
 
     private void registrarPaciente() {
@@ -86,6 +95,20 @@ public class SistemaEmergencias {
         System.out.println("Ambulancia registrada con éxito.");
     }
 
+private void registrarClinica() {
+    if (clinica.size() > 3) {
+        System.out.println("No se pueden registrar más clinicas.");
+        return;
+    }
+    System.out.print("Nombre de la clinica: "); 
+    String nombre = scanner.nextLine();
+    System.out.print("Distancia de la ambulancia : ");
+    int distancia = scanner.nextInt();
+    scanner.nextLine(); 
+    clinica.add(new Clinica(nombre, distancia));
+    System.out.println("Clinica registrada con éxito.");
+}
+
     private void marcarFallecido() {
         System.out.print("Ingrese el ID del paciente fallecido: ");
         String id = scanner.nextLine();
@@ -99,4 +122,44 @@ public class SistemaEmergencias {
             System.out.println("ID: " + paciente.getId() + ", Nombre: " + paciente.getNombre() + " " + paciente.getApellido());
         }
     }
+
+    public void solicitarAmbulancia(Clinica clinica) {
+    
+    for (Ambulancia ambulancia : ambulancias) {
+        if (ambulancia.getNumeroRecorridos() < 8 && ambulancia.getRecorridoTotal() < 400) {
+            ambulancia.agregarRecorrido(clinica.getDistancia());
+            System.out.println("Ambulancia asignada a " + clinica.getNombre());
+            return;
+        }
+    }
+    System.out.println("No hay ambulancias disponibles.");
 }
+
+
+    public void mostrarPacientesNoMovidos() {
+    for (Paciente paciente : pacientes) {
+        if (!paciente.isMovido()) {
+            System.out.println("Paciente no movido: " + paciente.getNombre());
+        }
+    }
+
+
+   
+}
+
+public void mostrarResumenAmbulancias() {
+    for (Ambulancia ambulancia : ambulancias) {
+        System.out.println("Ambulancia: " + ambulancia.getId() +
+                           ", Recorrido Total: " + ambulancia.getRecorridoTotal() +
+                           ", Número de Recorridos: " + ambulancia.getNumeroRecorridos());
+    }
+}
+
+}
+
+
+
+
+
+
+   

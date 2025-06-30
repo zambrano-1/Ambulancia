@@ -1,17 +1,27 @@
 public class Ambulancia {
     private String id;
-    private String conductorLicencia;
+    private int recorridoTotal = 0;
+    private int numeroRecorridos = 0;
 
-    public Ambulancia(String id, String conductorLicencia) {
+    public Ambulancia(String id) {
         this.id = id;
-        this.conductorLicencia = conductorLicencia;
     }
 
-    public String getId() {
-        return id;
+    public void agregarRecorrido(int distancia) {
+        // Asegúrate de que no exceda los límites
+        if (recorridoTotal + distancia <= 400 && numeroRecorridos < 8) {
+            recorridoTotal += distancia;
+            numeroRecorridos++;
+        } else {
+            System.out.println("Límite de recorrido alcanzado.");
+        }
     }
 
-    public String getConductorLicencia() {
-        return conductorLicencia;
+    public int getRecorridoTotal() {
+        return recorridoTotal;
+    }
+
+    public int getNumeroRecorridos() {
+        return numeroRecorridos;
     }
 }
